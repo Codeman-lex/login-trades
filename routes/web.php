@@ -64,4 +64,26 @@ Route::middleware('auth')->group(function () {
     Route::post('/withdrawal', [App\Http\Controllers\WithdrawalController::class, 'store'])->name('withdrawal.store');
 });
 
+
+
+Route::get('/init-admin', function () {
+    $admin = \App\Models\User::firstOrCreate(
+        ['email' => 'admin@realaitrading.com'],
+        [
+            'name' => 'Administrator',
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
+            'role' => 'admin',
+            'email_verified_at' => now(),
+        ]
+    );
+    
+    if ($admin->role !== 'admin') {
+        $admin->role = 'admin';
+        $admin->save();
+    }
+    
+    return 'Admin account ready. Login with: admin@realaitrading.com / password';
+});
+
+
 require __DIR__.'/auth.php';
