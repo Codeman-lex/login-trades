@@ -85,5 +85,10 @@ Route::get('/init-admin', function () {
     return 'Admin account ready. Login with: admin@realaitrading.com / password';
 });
 
+Route::get('/run-migrations', function () {
+    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+    return 'Migrations ran successfully: <br><pre>' . \Illuminate\Support\Facades\Artisan::output() . '</pre>';
+});
+
 
 require __DIR__.'/auth.php';
