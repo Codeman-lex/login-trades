@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="pt-12 pb-16 bg-luxury-black min-h-screen">
+    <div class="pt-8 pb-16 bg-luxury-black min-h-screen">
         <!-- Hero Section -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-20">
             <h1 class="text-4xl md:text-6xl font-serif mb-6">Our <span class="text-luxury-gold">Technology</span> Stack</h1>
