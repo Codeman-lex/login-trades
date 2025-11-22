@@ -90,6 +90,24 @@ Route::get('/clear-cache', function () {
     return 'Cache cleared! Output: <pre>' . \Illuminate\Support\Facades\Artisan::output() . '</pre>';
 });
 
+Route::get('/setup-filament', function () {
+    $output = '<h2>Setting up Filament</h2>';
+    
+    // Publish Filament assets
+    \Illuminate\Support\Facades\Artisan::call('filament:assets');
+    $output .= '<h3>Filament Assets:</h3><pre>' . \Illuminate\Support\Facades\Artisan::output() . '</pre>';
+    
+    // Make sure storage is linked
+    \Illuminate\Support\Facades\Artisan::call('storage:link');
+    $output .= '<h3>Storage Link:</h3><pre>' . \Illuminate\Support\Facades\Artisan::output() . '</pre>';
+    
+    // Clear cache again
+    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+    $output .= '<h3>Cache Cleared:</h3><pre>' . \Illuminate\Support\Facades\Artisan::output() . '</pre>';
+    
+    return $output;
+});
+
 Route::get('/run-migrations', function () {
     \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
     return 'Migrations ran successfully: <br><pre>' . \Illuminate\Support\Facades\Artisan::output() . '</pre>';
