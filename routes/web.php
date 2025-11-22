@@ -108,6 +108,20 @@ Route::get('/setup-filament', function () {
     return $output;
 });
 
+Route::get('/read-logs', function () {
+    $logFile = storage_path('logs/laravel.log');
+    
+    if (!file_exists($logFile)) {
+        return 'No log file found at: ' . $logFile;
+    }
+    
+    $content = file_get_contents($logFile);
+    // Get last 2000 characters to see recent errors
+    $content = substr($content, -5000);
+    
+    return '<pre>' . htmlspecialchars($content) . '</pre>';
+});
+
 Route::get('/run-migrations', function () {
     \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
     return 'Migrations ran successfully: <br><pre>' . \Illuminate\Support\Facades\Artisan::output() . '</pre>';
