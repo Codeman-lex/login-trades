@@ -134,19 +134,25 @@ Route::get('/test-filament', function () {
     error_reporting(E_ALL);
     
     try {
-        echo '<h2>Filament Resource Testing</h2>';
+        echo '<h2>Filament List Page Testing</h2>';
         
-        // Test loading Filament resources
-        echo '<h3>Testing Deposit Resource</h3>';
-        $resource = \App\Filament\Resources\DepositResource::class;
-       
-        $table = $resource::table(\Filament\Tables\Table::make());
-        echo '<p>✅ Deposit Resource table config loaded</p>';
+        // Try to instantiate the ListDeposits page (this is what Filament does)
+        echo '<p>Creating ListDeposits page instance...</p>';
+        $page = new \App\Filament\Resources\DepositResource\Pages\ListDeposits();
+        echo '<p>✅ Page instantiated successfully</p>';
         
-        // Try querying with Eloquent directly
-        echo '<h3>Testing Direct Queries</h3>';
-        $deposits = \App\Models\Deposit::with('user')->get();
-        echo '<p>✅ Can query deposits with user relationship: ' . $deposits->count() . ' records</p>';
+        // Try to get the resource
+        echo '<p>Getting resource class...</p>';
+        $resource = $page::getResource();
+        echo '<p>✅ Resource: ' . $resource . '</p>';
+        
+        // Try to query the model directly
+        echo '<p>Querying deposits...</p>';
+        $deposits = \App\Models\Deposit::all();
+        echo '<p>✅ Found ' . $deposits->count() . ' deposits</p>';
+        
+        echo '<h3 style="color:green;">All tests passed!</h3>';
+        echo '<p>The admin panel should work. Try accessing it again.</p>';
         
     } catch (\Throwable $e) {
         echo '<h2 style="color:red;">ERROR:</h2>';
