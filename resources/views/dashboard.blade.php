@@ -274,7 +274,7 @@
                         <span class="text-xs text-luxury-gold">Network: Bitcoin (BTC)</span>
                     </div>
                     <div class="flex items-center gap-3">
-                        <code class="flex-1 bg-transparent text-luxury-white font-mono text-sm break-all" id="btc-address">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</code>
+                        <code class="flex-1 bg-transparent text-luxury-white font-mono text-sm break-all" id="btc-address">bc1qxygjfg47are2su0l7kxmx28tqw62tugtn4jrdh</code>
                         <button onclick="navigator.clipboard.writeText(document.getElementById('btc-address').innerText); this.innerHTML = 'Copied!'; setTimeout(() => this.innerHTML = 'Copy', 2000);" class="p-2 bg-luxury-white/5 hover:bg-luxury-white/10 rounded-lg text-luxury-white/60 hover:text-luxury-white transition-colors text-xs font-bold uppercase tracking-wider">
                             Copy
                         </button>
