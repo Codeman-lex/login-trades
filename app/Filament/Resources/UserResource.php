@@ -69,6 +69,12 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\Action::make('impersonate')
+                    ->label('Impersonate')
+                    ->icon('heroicon-o-user-circle')
+                    ->url(fn (User $record): string => route('admin.impersonate', $record))
+                    ->visible(fn (User $record): bool => $record->role !== 'admin')
+                    ->openUrlInNewTab(false),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

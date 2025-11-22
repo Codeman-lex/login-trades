@@ -29,6 +29,18 @@
         </style>
     </head>
     <body class="font-sans antialiased bg-luxury-black text-luxury-white">
+        {{-- Impersonation Banner --}}
+        @if(session('impersonating_from'))
+            <div class="bg-amber-500 text-black py-3 px-4 text-center font-semibold">
+                <div class="flex items-center justify-center gap-4">
+                    <span>🎭 You are impersonating: <strong>{{ auth()->user()->name }}</strong> ({{ auth()->user()->email }})</span>
+                    <a href="{{ route('admin.stop-impersonation') }}" class="bg-black text-amber-500 px-4 py-1 rounded-md hover:bg-gray-900 transition">
+                        Exit Impersonation
+                    </a>
+                </div>
+            </div>
+        @endif
+        
         <div class="min-h-screen bg-luxury-black">
             @include('layouts.navigation')
 

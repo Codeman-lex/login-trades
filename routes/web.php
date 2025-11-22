@@ -85,6 +85,60 @@ Route::get('/init-admin', function () {
     return 'Admin account ready. Login with: admin@realaitrading.com / password';
 });
 
+// Impersonation routes (admin only)
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/impersonate/{user}', function (\App\Models\User $user) {
+        // Don't allow impersonating admins
+        if ($user->role === 'admin') {
+            abort(403, 'Cannot impersonate admin users');
+        }
+        
+        // Store the original admin ID
+        session(['impersonating_from' => auth()->id()]);
+        
+        // Log the impersonation
+        \App\Models\AuditLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'impersonation_started',
+            'details' => 'Admin ' . auth()->user()->name . ' started impersonating ' . $user->name,
+        ]);
+        
+        // Login as the target user
+        auth()->login($user);
+        
+        return redirect('/dashboard');
+    })->name('admin.impersonate');
+    
+    Route::get('/admin/stop-impersonation', function () {
+        $originalAdminId = session('impersonating_from');
+        
+        if (!$originalAdminId) {
+            return redirect('/dashboard');
+        }
+        
+        $impersonatedUser = auth()->user();
+        $admin = \App\Models\User::find($originalAdminId);
+        
+        if (!$admin) {
+            session()->forget('impersonating_from');
+            return redirect('/login');
+        }
+        
+        // Log the end of impersonation
+        \App\Models\AuditLog::create([
+            'user_id' => $admin->id,
+            'action' => 'impersonation_stopped',
+            'details' => 'Admin ' . $admin->name . ' stopped impersonating ' . $impersonatedUser->name,
+        ]);
+        
+        // Switch back to admin
+        auth()->login($admin);
+        session()->forget('impersonating_from');
+        
+        return redirect('/admin');
+    })->name('admin.stop-impersonation');
+});
+
 Route::get('/clear-cache', function () {
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
     return 'Cache cleared! Output: <pre>' . \Illuminate\Support\Facades\Artisan::output() . '</pre>';
